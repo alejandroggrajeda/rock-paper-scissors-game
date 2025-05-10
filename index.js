@@ -86,11 +86,11 @@ const autoplay = () => {
       playGame(playerMove);
     }, 1000);
     isAutoPlaying = true;
-    document.querySelector(".js-autoplay").innerHTML = "Stop autoplay";
+    document.querySelector(".js-autoplay").innerHTML = "Stop Auto-Play";
   } else {
     clearInterval(intervalId);
     isAutoPlaying = false;
-    document.querySelector(".js-autoplay").innerHTML = "Start autoplay";
+    document.querySelector(".js-autoplay").innerHTML = "Auto-Play";
   }
 };
 
