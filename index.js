@@ -5,7 +5,7 @@ let score = JSON.parse(localStorage.getItem("score")) || {
   ties: 0,
 };
 
-updateScoreElement();
+renderScore();
 
 document.querySelector(".js-result").innerHTML = `Start Playing!`;
 
@@ -16,8 +16,8 @@ function playGame(playerMove) {
 
   updateScore(result);
   saveScore();
-  updateScoreElement();
-  renderScore(playerMove, computerMove, result);
+  renderScore();
+  renderResult(playerMove, computerMove, result);
 }
 
 function pickComputerMove() {
@@ -51,14 +51,14 @@ function saveScore() {
   localStorage.setItem("score", JSON.stringify(score));
 }
 
-function updateScoreElement() {
+function renderScore() {
   const { wins, losses, ties } = score;
   document.querySelector(
     ".js-score"
   ).innerHTML = `Wins: ${wins}, Losses: ${losses}, Ties: ${ties}`;
 }
 
-function renderScore(playerMove, computerMove, result) {
+function renderResult(playerMove, computerMove, result) {
   document.querySelector(".js-result").innerHTML = `
     ${result} <br><br>
     You picked <img src='images/${playerMove}-emoji.png' class='move-icon'> 
@@ -79,7 +79,7 @@ document
 let isAutoPlaying = false;
 let intervalId;
 
-const autoplay = () => {
+const handleAutoplay = () => {
   if (!isAutoPlaying) {
     intervalId = setInterval(() => {
       const playerMove = pickComputerMove();
@@ -96,7 +96,7 @@ const autoplay = () => {
 
 document
   .querySelector(".js-autoplay")
-  .addEventListener("click", () => autoplay());
+  .addEventListener("click", () => handleAutoplay());
 
 // reset button logic & confirmation modal
 const resetScore = () => {
@@ -105,7 +105,7 @@ const resetScore = () => {
   score.ties = 0;
 
   localStorage.removeItem("score");
-  updateScoreElement();
+  renderScore();
   document.querySelector(".js-result").innerHTML = `Start Playing!`;
 };
 
@@ -116,7 +116,7 @@ const noButton = document.querySelector(".no-modal-button");
 const modalMessage = document.querySelector(".modal-message");
 const closeButton = document.querySelector(".close-button");
 
-function resetTrigger(event) {
+function triggerResetModal(event) {
   if (
     event.type === "click" ||
     (event.type === "keydown" && event.key === "Backspace")
@@ -139,8 +139,8 @@ function resetTrigger(event) {
 
 document
   .querySelector(".reset-button")
-  .addEventListener("click", (event) => resetTrigger(event));
-document.addEventListener("keydown", (event) => resetTrigger(event));
+  .addEventListener("click", (event) => triggerResetModal(event));
+document.addEventListener("keydown", (event) => triggerResetModal(event));
 
 yesButton.addEventListener("click", () => {
   resetScore();
@@ -153,7 +153,7 @@ closeButton.addEventListener("click", () => (modal.style.display = "none"));
 
 // keydown events
 document.addEventListener("keydown", (event) => {
-  if (event.key == "a") autoplay();
+  if (event.key == "a") handleAutoplay();
 });
 
 document.addEventListener("keydown", (event) => {
